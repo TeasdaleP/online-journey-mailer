@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Email } from "src/email/email.entities";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Contact {
@@ -23,10 +24,10 @@ export class Contact {
     @Column({ type: 'text' })
     message: string;
 
-    @Column({ type: 'text', nullable: true })
-    notification: string;
+    // @Column({ type: 'text', nullable: true })
+    // notification: string;
 
-    // @OneToOne(() => Email, { cascade: true })
-    // @JoinColumn()
-    // notification: Email;
+    @OneToOne(() => Email, { cascade: true })
+    @JoinColumn()
+    notification: Email;
 }

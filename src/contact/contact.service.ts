@@ -3,14 +3,17 @@ import { CreateContactDto } from './dto/create-contact.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Contact } from './entities/contact.entity';
+import { Mailer } from 'src/utilities/interface/mailer.interface';
+import { EmailService } from 'src/email/email.service';
+import { Email } from 'src/email/email.entities';
 
 @Injectable()
 export class ContactService {
 
   constructor(
     @InjectRepository(Contact)
-    private readonly contactRepository: Repository<Contact>
-    /** this is where you will need to add the email service */
+    private readonly contactRepository: Repository<Contact>,
+    private readonly emailService: EmailService
 ) {}
 
   async create(createContactDto: CreateContactDto): Promise<Record<string, any>> {
@@ -24,10 +27,22 @@ export class ContactService {
       throw new BadRequestException(`The telephone you provided was ${createContactDto.telephone}`)
     }
 
-    /** this is where you need to call the relay service to send message */
-    const relay = true;
+    const recipent: Mailer = {
+      recipent: 'pteasdale55@gmail.com',
+      subject: `${createContactDto.firstname} has contacted you via the website.`,
+      template: './contact',
+      context: {
+        firstname: createContactDto.firstname,
+        lastname: createContactDto.lastname,
+        email: createContactDto.email,
+        telephone: createContactDto.telephone,
+        message: createContactDto.message
+      }
+    }
+    
+    const emailRelay = await this.emailService.sendEmail(recipent);
 
-    if (!relay) {
+    if (!emailRelay) {
       throw new InternalServerErrorException()
     }
 
@@ -36,6 +51,7 @@ export class ContactService {
     contact.email = createContactDto.email
     contact.telephone = createContactDto.telephone
     contact.message = createContactDto.message
+    contact.notification = emailRelay
 
     return this.contactRepository.save(contact);
   }

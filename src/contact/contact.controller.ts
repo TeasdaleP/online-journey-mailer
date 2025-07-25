@@ -2,7 +2,7 @@ import { Controller, Post, Body } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { ApiOperation, ApiOkResponse, ApiBadRequestResponse, ApiGatewayTimeoutResponse } from '@nestjs/swagger';
-import { HttpOkDesc, HttpBadRequestDesc, HttpTimeoutDesc } from 'src/utilities/response-descriptions';
+import { HttpOkDesc, HttpBadRequestDesc, HttpTimeoutDesc } from 'src/utilities/constants/response-descriptions';
 
 @Controller('contact')
 export class ContactController {
