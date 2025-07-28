@@ -29,7 +29,7 @@ export class ContactService {
 
     const recipent: Mailer = {
       recipent: 'pteasdale55@gmail.com',
-      subject: `${createContactDto.firstname} has contacted you via the website.`,
+      subject: `${createContactDto.firstname}, has contacted you via the website.`,
       template: './contact',
       context: {
         firstname: createContactDto.firstname,

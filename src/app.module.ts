@@ -16,12 +16,12 @@ import { join } from 'path';
     }),
     MailerModule.forRoot({
       transport: {
-        host: 'smtp-relay.brevo.com',  
-        port: Number(587),  
+        host: process.env.SMTP_RELAY_HOST,  
+        port: Number(process.env.SMTP_RELAY_PORT),  
         secure: false,  
         auth: {  
-          user: '931dec001@smtp-brevo.com',  
-          pass: 'nGZX4Dx7bW80YmUF',  
+          user: process.env.SMTP_RELAY_USER,  
+          pass: process.env.SMTP_RELAY_PASSWORD,  
         },  
       },
       defaults: {
